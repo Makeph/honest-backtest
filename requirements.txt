@@ -1,0 +1,9 @@
+pandas>=2.0
+numpy>=1.24
+yfinance>=0.2
+pytest>=7.0
+
+# Optional deep-data backends (install only the one you use):
+#   pip install databento     # FUT_DATA_SOURCE=databento (needs DATABENTO_API_KEY)
+#   pip install ib_async      # FUT_DATA_SOURCE=ibkr (needs TWS/Gateway running)
+# csv backend needs nothing extra.
