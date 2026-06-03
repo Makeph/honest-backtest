@@ -1,5 +1,7 @@
 # Au2fut — CME Micro Futures Prop Edge Harness
 
+![Honest backtest — prove an edge out-of-sample or kill it](assets/cover.png)
+
 > **Research only. No live trading, no execution code.** This phase answers one
 > question honestly: *does a tradeable edge survive real futures costs and a prop
 > firm's drawdown rules?* Built on the discipline of the au2 / Au2qwen edge
