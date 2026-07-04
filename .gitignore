@@ -1,7 +1,6 @@
 __pycache__/
 *.pyc
 .env
-honestbacktest/data/cache/
 honestbacktest/data/csv/
 .pytest_cache/
 *.db

@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "honestbacktest"
-version = "0.1.0"
+version = "0.1.1"
 description = "CME micro futures prop edge harness: prove a tradeable edge out-of-sample or kill it before building trading infrastructure."
 readme = "README.md"
 requires-python = ">=3.10"

@@ -24,7 +24,7 @@ from pathlib import Path
 
 from honestbacktest.core.instruments import get as get_instrument
 
-CACHE_DIR = Path(__file__).resolve().parent / "cache"
+CACHE_DIR = Path(os.environ.get("HONESTBACKTEST_CACHE", str(Path.home() / ".cache" / "honestbacktest")))
 CSV_DIR = Path(__file__).resolve().parent / "csv"
 
 # bar tuple layout: (epoch_ms, open, high, low, close, volume)
