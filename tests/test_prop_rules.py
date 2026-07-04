@@ -7,8 +7,8 @@ from __future__ import annotations
 
 import pytest
 
-from core.prop_rules import (APEX_50K, TOPSTEP_50K, AccountState, Outcome,
-                             PropRules)
+from honestbacktest.core.prop_rules import (APEX_50K, TOPSTEP_50K, AccountState,
+                                            Outcome, PropRules)
 
 
 def test_initial_floor():

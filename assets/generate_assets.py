@@ -42,7 +42,7 @@ def cover():
     # left accent bar
     d.rectangle([0, 0, 8, H], fill=GREEN)
     # prompt tag
-    d.text((64, 60), "$ python validate.py", font=mono(24), fill=GREEN)
+    d.text((64, 60), "$ honest-backtest", font=mono(24), fill=GREEN)
     # title
     d.text((62, 110), "honest-backtest", font=bold(76), fill=WHITE)
     # tagline (two lines)
@@ -80,7 +80,7 @@ def verdict():
     x, y = m + 36, m + 74
     lh = 37
     lines = [
-        (GREEN, "$ python validate.py mr MES 5m 1y"),
+        (GREEN, "$ honest-backtest mr MES 5m 1y"),
         (GRAY,  ""),
         (WHITE, "== HONEST EDGE VERDICT: MES session mean-reversion =="),
         (GRAY,  "   1-year Databento data  |  8-fold walk-forward"),

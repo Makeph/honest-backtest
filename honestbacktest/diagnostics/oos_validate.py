@@ -16,16 +16,16 @@ Sample sizes on free Yahoo data are small — read the n_test honestly; a handfu
 of OOS trades is suggestive, not conclusive. Deeper data (Databento/IBKR) later.
 
 Usage:
-  python -m diagnostics.oos_validate MES 1h 60d
-  python -m diagnostics.oos_validate MNQ 1d 2y --folds 4
+  python -m honestbacktest.diagnostics.oos_validate MES 1h 60d
+  python -m honestbacktest.diagnostics.oos_validate MNQ 1d 2y --folds 4
 """
 from __future__ import annotations
 
 import argparse
 
-from core.instruments import get as get_instrument
-from data.fetch import fetch_bars, span_days
-from diagnostics.edge_scan import PARAM_GRID, donchian_backtest
+from honestbacktest.core.instruments import get as get_instrument
+from honestbacktest.data.fetch import fetch_bars, span_days
+from honestbacktest.diagnostics.edge_scan import PARAM_GRID, donchian_backtest
 
 
 def _select_best(bars, inst, min_trades=8):

@@ -17,15 +17,15 @@ or stop. Vol gate skips bars where ATR% < min_atr_pct (dead market — costs win
 Outputs $ stats per 1 contract and exposes `run_best()` for prop_mc.py.
 
 Usage:
-  python -m diagnostics.edge_scan MES 1h 60d
-  python -m diagnostics.edge_scan MNQ 15m 60d
+  python -m honestbacktest.diagnostics.edge_scan MES 1h 60d
+  python -m honestbacktest.diagnostics.edge_scan MNQ 15m 60d
 """
 from __future__ import annotations
 
 import sys
 
-from core.instruments import Instrument, get as get_instrument
-from data.fetch import fetch_bars, span_days
+from honestbacktest.core.instruments import Instrument, get as get_instrument
+from honestbacktest.data.fetch import fetch_bars, span_days
 
 
 def _atr(bars: list[tuple], i: int, n: int) -> float | None:

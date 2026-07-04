@@ -6,9 +6,9 @@ discipline: it NEVER reports an in-sample number as the verdict. It selects
 parameters on a training slice and judges them on held-out data via anchored
 walk-forward — the out-of-sample net result is the only number that decides.
 
-    python validate.py edge   MES 5m 1y          # Donchian breakout
-    python validate.py mr     MES 5m 1y          # session mean-reversion
-    python validate.py spread MES MNQ 5m 1y      # cointegrated spread MR
+    honest-backtest edge   MES 5m 1y          # Donchian breakout
+    honest-backtest mr     MES 5m 1y          # session mean-reversion
+    honest-backtest spread MES MNQ 5m 1y      # cointegrated spread MR
 
 Set the data source first (yahoo default; databento for deep multi-regime data):
     FUT_DATA_SOURCE=databento  DATABENTO_API_KEY=...
@@ -20,8 +20,8 @@ from __future__ import annotations
 
 import argparse
 
-from core.instruments import get as get_instrument
-from data.fetch import fetch_bars, span_days
+from honestbacktest.core.instruments import get as get_instrument
+from honestbacktest.data.fetch import fetch_bars, span_days
 
 
 # ── generic anchored walk-forward ────────────────────────────────────────────
@@ -60,7 +60,7 @@ def _stats(trades):
 
 # ── strategy adapters ────────────────────────────────────────────────────────
 def _setup_edge(args):
-    from diagnostics import edge_scan, oos_validate
+    from honestbacktest.diagnostics import edge_scan, oos_validate
     inst = get_instrument(args.legA)
     bars = fetch_bars(args.legA, args.interval, args.period)
     select = lambda b: oos_validate._select_best(b, inst, min_trades=6)[1]
@@ -69,7 +69,7 @@ def _setup_edge(args):
 
 
 def _setup_mr(args):
-    from diagnostics import mr_session as mr
+    from honestbacktest.diagnostics import mr_session as mr
     inst = get_instrument(args.legA)
     bars = fetch_bars(args.legA, args.interval, args.period)
     select = lambda b: mr._select_best(b, inst, 6, mr.RTH_START, mr.RTH_END)[1]
@@ -78,7 +78,7 @@ def _setup_mr(args):
 
 
 def _setup_spread(args):
-    from diagnostics import spread_mr as sp
+    from honestbacktest.diagnostics import spread_mr as sp
     instA, instB = get_instrument(args.legA), get_instrument(args.legB)
     rows = sp._align(fetch_bars(args.legA, args.interval, args.period),
                      fetch_bars(args.legB, args.interval, args.period))
@@ -101,7 +101,7 @@ def main():
     args = ap.parse_args()
 
     if args.strategy == "spread" and not args.legB:
-        ap.error("spread needs two legs, e.g. `validate.py spread MES MNQ 5m 1y`")
+        ap.error("spread needs two legs, e.g. `honest-backtest spread MES MNQ 5m 1y`")
     # for non-spread, a value landing in legB is actually the interval/period
     if args.strategy != "spread" and args.legB:
         args.legB, args.interval, args.period = None, args.legB, args.interval

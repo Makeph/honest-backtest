@@ -24,16 +24,16 @@ Classic pairs (need both legs fetchable; deep data via Databento recommended):
   GC  HG    gold/copper (risk-on/off)
 
 Usage:
-  python -m diagnostics.spread_mr MES MNQ 5m 1y --folds 8
-  python -m diagnostics.spread_mr GC SI 15m 2y
+  python -m honestbacktest.diagnostics.spread_mr MES MNQ 5m 1y --folds 8
+  python -m honestbacktest.diagnostics.spread_mr GC SI 15m 2y
 """
 from __future__ import annotations
 
 import argparse
 import math
 
-from core.instruments import get as get_instrument
-from data.fetch import fetch_bars, span_days
+from honestbacktest.core.instruments import get as get_instrument
+from honestbacktest.data.fetch import fetch_bars, span_days
 
 # (N, k_entry, k_stop); k_exit fixed near the mean
 PARAM_GRID = [(N, ke, ks)

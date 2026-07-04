@@ -19,16 +19,16 @@ RTH window is UTC minutes. US cash open 09:30 ET = 13:30 UTC under EDT (the rece
 data window is summer 2026 -> EDT). Override via --rth-start/--rth-end if needed.
 
 Usage:
-  python -m diagnostics.mr_session MES 15m 60d
-  python -m diagnostics.mr_session MNQ 5m 60d --folds 5
+  python -m honestbacktest.diagnostics.mr_session MES 15m 60d
+  python -m honestbacktest.diagnostics.mr_session MNQ 5m 60d --folds 5
 """
 from __future__ import annotations
 
 import argparse
 from datetime import datetime, timezone
 
-from core.instruments import Instrument, get as get_instrument
-from data.fetch import fetch_bars, span_days
+from honestbacktest.core.instruments import Instrument, get as get_instrument
+from honestbacktest.data.fetch import fetch_bars, span_days
 
 # registered defaults
 RTH_START = 13 * 60 + 30      # 13:30 UTC = 09:30 ET (EDT)

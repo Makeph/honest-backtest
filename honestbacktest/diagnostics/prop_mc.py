@@ -3,7 +3,7 @@
 
 Chains the two honest pieces:
   1. edge_scan.run_best() -> empirical per-trade $ distribution (per 1 contract).
-  2. core.prop_rules AccountState -> the firm's trailing-DD / daily-loss / target
+  2. honestbacktest.core.prop_rules AccountState -> the firm's trailing-DD / daily-loss / target
      machine.
 
 We bootstrap synthetic trading days from the empirical trades, scale to `contracts`,
@@ -16,7 +16,7 @@ If edge_scan shows net_mean <= 0 here, this will show P(pass) at or below the
 break-even-on-noise rate — confirming the same verdict for this instrument.
 
 Usage:
-  python -m diagnostics.prop_mc MES 1h 60d topstep_50k --contracts 4 --fee 165
+  python -m honestbacktest.diagnostics.prop_mc MES 1h 60d topstep_50k --contracts 4 --fee 165
 """
 from __future__ import annotations
 
@@ -24,9 +24,9 @@ import argparse
 import random
 from collections import defaultdict
 
-from core.prop_rules import PRESETS, AccountState, Outcome
-from diagnostics.edge_scan import run_best
-from diagnostics.mr_session import run_primary as run_mr_primary
+from honestbacktest.core.prop_rules import PRESETS, AccountState, Outcome
+from honestbacktest.diagnostics.edge_scan import run_best
+from honestbacktest.diagnostics.mr_session import run_primary as run_mr_primary
 
 
 def _empirical_days(trades: list[dict]) -> list[list[float]]:

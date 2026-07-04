@@ -1,7 +1,9 @@
 __pycache__/
 *.pyc
 .env
-data/cache/
-data/csv/
+honestbacktest/data/cache/
+honestbacktest/data/csv/
 .pytest_cache/
 *.db
+dist/
+*.egg-info/

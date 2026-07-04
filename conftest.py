@@ -1,4 +1,4 @@
-"""Make the project root importable so `core` / `data` / `diagnostics` resolve."""
+"""Make the project root importable for local package tests."""
 import sys
 from pathlib import Path
 

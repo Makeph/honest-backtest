@@ -25,13 +25,13 @@ cp .env.example .env      # research-only; no live keys
 ## The pipeline
 
 ```
-data/fetch.py        bars — pluggable source (yahoo|databento|ibkr|csv), cached
-  └─ core/instruments.py    exact tick value + $ cost model (env-overridable)
-       └─ diagnostics/edge_scan.py   breakout net $/contract verdict
-       └─ diagnostics/mr_session.py  session mean-reversion (pre-registered, OOS)
-            └─ diagnostics/oos_validate.py   train/test + walk-forward OOS
-                 └─ core/prop_rules.py    Topstep/Apex trailing-DD machine
-                      └─ diagnostics/prop_mc.py   P(pass), EV (--strategy mr|breakout)
+honestbacktest/data/fetch.py        bars — pluggable source (yahoo|databento|ibkr|csv), cached
+  └─ honestbacktest/core/instruments.py    exact tick value + $ cost model (env-overridable)
+       └─ honestbacktest/diagnostics/edge_scan.py   breakout net $/contract verdict
+       └─ honestbacktest/diagnostics/mr_session.py  session mean-reversion (pre-registered, OOS)
+            └─ honestbacktest/diagnostics/oos_validate.py   train/test + walk-forward OOS
+                 └─ honestbacktest/core/prop_rules.py    Topstep/Apex trailing-DD machine
+                      └─ honestbacktest/diagnostics/prop_mc.py   P(pass), EV (--strategy mr|breakout)
 ```
 
 ## Data sources (set `FUT_DATA_SOURCE`)
@@ -41,7 +41,7 @@ data/fetch.py        bars — pluggable source (yahoo|databento|ibkr|csv), cache
 | `yahoo` (default) | intraday ~60d (tiny OOS) | none |
 | `databento` | CME Globex minute/tick, multi-year | `pip install databento`, `DATABENTO_API_KEY` |
 | `ibkr` | IBKR historical (pacing-limited) | `pip install ib_async`, TWS/Gateway running |
-| `csv` | whatever you export | `data/csv/<SYM>_<interval>.csv` or `FUT_CSV_PATH` |
+| `csv` | whatever you export | `honestbacktest/data/csv/<SYM>_<interval>.csv` or `FUT_CSV_PATH` |
 
 Sub-hourly bars (5m/15m/30m) for databento/ibkr are aggregated from 1m, aligned
 to midnight UTC so RTH filtering stays correct. **All diagnostics are
@@ -54,24 +54,24 @@ the moment you plug in Databento/IBKR.
 One command, any strategy, honest out-of-sample verdict (never an in-sample number):
 
 ```bash
-python validate.py edge   MES 5m 1y        # Donchian breakout
-python validate.py mr     MES 5m 1y        # session mean-reversion
-python validate.py spread MES MNQ 5m 1y    # cointegrated spread MR
+honest-backtest edge   MES 5m 1y        # Donchian breakout
+honest-backtest mr     MES 5m 1y        # session mean-reversion
+honest-backtest spread MES MNQ 5m 1y    # cointegrated spread MR
 ```
 
 For deep multi-regime data (the only way to trust the verdict), set the source:
 
 ```bash
 # PowerShell:  $env:FUT_DATA_SOURCE="databento"; $env:DATABENTO_API_KEY="db-..."
-FUT_DATA_SOURCE=databento DATABENTO_API_KEY=db-... python validate.py mr MNQ 5m 1y
+FUT_DATA_SOURCE=databento DATABENTO_API_KEY=db-... honest-backtest mr MNQ 5m 1y
 ```
 
 Lower-level tools the CLI wraps:
 
 ```bash
-python -m data.fetch MES 1h 60d                                   # sanity-check data
-python -m diagnostics.edge_scan  MES 1h 60d                       # in-sample sweep (context)
-python -m diagnostics.prop_mc    MES 5m 1y topstep_50k --strategy mr --contracts 2
+python -m honestbacktest.data.fetch MES 1h 60d                                   # sanity-check data
+python -m honestbacktest.diagnostics.edge_scan  MES 1h 60d                       # in-sample sweep (context)
+python -m honestbacktest.diagnostics.prop_mc    MES 5m 1y topstep_50k --strategy mr --contracts 2
 python -m pytest tests/ -q                                        # trust the rule engine
 ```
 
@@ -119,7 +119,7 @@ on hundreds of OOS trades — see `docs/METHODOLOGY.md`.
 
 ## Session mean-reversion — the first hypothesis to SURVIVE OOS
 
-`diagnostics/mr_session.py` (pre-registered: fade Bollinger extremes inside RTH,
+`honestbacktest/diagnostics/mr_session.py` (pre-registered: fade Bollinger extremes inside RTH,
 flat at close — the *inverse* of breakout). Anchored walk-forward, OOS:
 
 | Instrument | TF | OOS n | net_mean | PF | survives 2-tick slip? | 3-tick? |
@@ -164,12 +164,12 @@ slippage on the open fade.
 
 ```
 Au2fut/
-├── core/
+├── honestbacktest/core/
 │   ├── instruments.py   CME micro specs + $ cost model
 │   └── prop_rules.py    Topstep/Apex trailing-DD / daily-loss / target engine
-├── data/
+├── honestbacktest/data/
 │   └── fetch.py         Yahoo bar fetcher (cached); swap for Databento/IBKR later
-├── diagnostics/
+├── honestbacktest/diagnostics/
 │   ├── edge_scan.py     vol-gated Donchian backtest, net $ verdict
 │   └── prop_mc.py       Monte Carlo P(pass)/EV through the prop rules
 ├── tests/               prop-rules engine tests (9, all green)
@@ -181,7 +181,7 @@ Au2fut/
 - [x] Honest $ cost model + prop-rules engine (tested)
 - [x] Edge-scan + prop Monte Carlo, runnable on real data
 - [x] OOS validation (`oos_validate.py`) — **in-sample edge did NOT survive on free data**
-- [ ] **Deeper data**: minute bars w/ years of history (Databento/IBKR) → swap `data/fetch.py`
+- [ ] **Deeper data**: minute bars w/ years of history (Databento/IBKR) → swap `honestbacktest/data/fetch.py`
 - [ ] Re-run OOS for a statistically meaningful sample (target ≥ 100 OOS trades)
 - [ ] Calibrate `FUT_RT_COMMISSION` to a real prop plan fee schedule
 - [ ] Forward live-paper to confirm backtest net $/trade

@@ -22,7 +22,7 @@ import time
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
-from core.instruments import get as get_instrument
+from honestbacktest.core.instruments import get as get_instrument
 
 CACHE_DIR = Path(__file__).resolve().parent / "cache"
 CSV_DIR = Path(__file__).resolve().parent / "csv"
